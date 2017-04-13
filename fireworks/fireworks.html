@@ -105,7 +105,12 @@
 		$(function() {
 			$("body").on("click",function(evt){
 				var evt1 = evt || event;
-				new Fire({x:evt1.clientX,y:evt1.clientY}).init().launch();
+				if($(".fire").length<2){
+					new Fire({x:evt1.clientX,y:evt1.clientY}).init().launch();
+				}else{
+					return
+				}
+				
 			})
 		})
 
@@ -116,28 +121,57 @@
 			this.init = function(){
 				this.element.css({
 					"left": this.point.x,
-					"top": $("html").height()
+					"top": $("html").height(),
+					"background": "#"+Math.floor(Math.random()*0xffffff).toString(16)
 				})
 				return this;
 			}
 			this.launch = function(){
+				var that = this;
 				this.element.animate({
 					"top": this.point.y,
 					"height": "5px"
-				},500,function(){
-					
+				},400,function(){
+					that.explode();
 				})
 			}
 			this.explode = function(){
 				this.element.remove();
 				for(var i = 0; i < 30; i++){
-					new Spark();
+					new Spark(a).init().move();
 				}
 			}
 		}
 		
-		function Spark(){
+		function Spark(a){
+			this.point = a;
+			this.element = $("<div class='spark'></div>");
+			$("body").append(this.element);
+			this.init = function(){
+				this.element.css({
+					"left": this.point.x,
+					"top": this.point.y,
+					"background": "#"+Math.floor(Math.random()*0xffffff).toString(16)
+				})
+				return this;
+			}
+			this.vspeed = Math.floor(Math.random()*30+1)*(Math.random()>0.5?1:-1);
+			this.hspeed = Math.floor(Math.random()*30+1)*(Math.random()>0.5?1:-1);
 			
+			this.move = function(){
+				var that = this;
+				var timer = setInterval(function(){
+					if(that.element.offset().left<0 || that.element.offset().left>$("body").width() || that.element.offset().top>$("body").height()){
+						clearInterval(timer);
+						that.element.remove();
+					}
+					that.hspeed+=0.5;
+					that.element.css({
+						left:that.element.offset().left+that.vspeed,
+						top:that.element.offset().top+that.hspeed
+					})
+				},20);
+			}
 		}
 	</script>
 
