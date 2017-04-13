@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			html,
+			body {
+				overflow: hidden;
+				width: 100%;
+				height: 100%;
+			}
+			
+			body,
+			div,
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			
+			body {
+				background: #222;
+				font: 12px/1.5 arial;
+				color: #7A7A7A;
+			}
+			
+			a {
+				text-decoration: none;
+				outline: none;
+			}
+			
+			#tips,
+			#copyright {
+				position: absolute;
+				width: 100%;
+				height: 50px;
+				text-align: center;
+				background: #171717;
+				border: 2px solid #484848;
+			}
+			
+			#tips {
+				top: 0;
+				border-width: 0 0 2px;
+			}
+			
+			#tips a {
+				font: 14px/30px arial;
+				color: #FFF;
+				background: #F06;
+				display: inline-block;
+				margin: 10px 5px 0;
+				padding: 0 15px;
+				border-radius: 15px;
+			}
+			
+			#tips a.active {
+				background: #FE0000;
+			}
+			
+			#copyright {
+				bottom: 0;
+				line-height: 50px;
+				border-width: 2px 0 0;
+			}
+			
+			#copyright a {
+				color: #FFF;
+				background: #7A7A7A;
+				padding: 2px 5px;
+				border-radius: 10px;
+			}
+			
+			#copyright a:hover {
+				background: #F90;
+			}
+			
+			p {
+				position: absolute;
+				top: 55px;
+				width: 100%;
+				text-align: center;
+			}
+			
+			.fire {
+				width: 5px;
+				height: 30px;
+				background: white;
+				position: absolute;
+			}
+			
+			.spark {
+				position: absolute;
+				width: 5px;
+				height: 5px;
+			}
+		</style>
+	</head>
+
+	<body>
+	</body>
+	<script src="jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("body").on("click",function(evt){
+				var evt1 = evt || event;
+				new Fire({x:evt1.clientX,y:evt1.clientY}).init().launch();
+			})
+		})
+
+		function Fire(a) {
+			this.point = a;
+			this.element = $("<div class='fire'></div>");
+			$("body").append(this.element);
+			this.init = function(){
+				this.element.css({
+					"left": this.point.x,
+					"top": $("html").height()
+				})
+				return this;
+			}
+			this.launch = function(){
+				this.element.animate({
+					"top": this.point.y,
+					"height": "5px"
+				},500,function(){
+					
+				})
+			}
+			this.explode = function(){
+				this.element.remove();
+				for(var i = 0; i < 30; i++){
+					new Spark();
+				}
+			}
+		}
+		
+		function Spark(){
+			
+		}
+	</script>
+
+</html>
